@@ -1,12 +1,12 @@
 package org.example;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Scanner;
-
 public class Main {
     public static void main(String[] args) {
+        App app = new App();
+        app.run();
+
+        //직접 쓴 코드
+        /*
         String query;
         String saying;
         String name;
@@ -96,5 +96,17 @@ public class Main {
                 break;
             }
         }
+
+         */
+    }
+}
+
+class App{
+
+    public void run() {
+        System.out.println("== 명언 ==");
+
+        System.out.print("명령) ");
+
     }
 }

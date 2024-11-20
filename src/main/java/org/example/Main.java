@@ -23,14 +23,11 @@ class App {
 
     //주 구동 함수
     public static void run() {
-        System.out.println("== 명언 앱 ==");
+        System.out.println("== 명언 앱 ==");   //시작 시 보이는 글짜 출력
 
-        //HashMap<Integer, String[]> saying_list = new HashMap<Integer, String[]>();
-
-        //String path = "db/wiseSaying";
         File folder = new File(path);
 
-        int next_num = getNextId(path);
+        int next_num = getNextId(path);     //최신 번호를 가져오기
 
         while (true) {
             System.out.print("명령) ");
@@ -67,26 +64,7 @@ class App {
             else if (query.contains("수정?id=")) {
                 int edit_num = Integer.parseInt(query.substring(query.indexOf("=")+1));
 
-                if (saying_list.containsKey(edit_num)) {
-                    String[] values = saying_list.get(edit_num);
-                    System.out.println("명언(기존) : " + values[0]);
-                    System.out.print("명언 : ");
-                    String new_saying = scanner.nextLine();
-
-                    System.out.println("이름(기존) : " + values[1]);
-                    System.out.print("이름 : ");
-                    String new_name = scanner.nextLine();
-
-                    saying_list.put(edit_num, new String[]{new_name, new_saying});
-                } else {
-                    String file_path = path + "/" + edit_num + ".json";
-                    File file = new File(file_path);
-                    if (file.exists()) {
-                        modifyFile(file_path);
-                    } else {
-                        System.out.println("파일이 존재하지 않습니다.");
-                    }
-                }
+                modifySaying(edit_num, path);
             }
 
             //명언 저장
@@ -310,6 +288,30 @@ class App {
                 }
             } else {
                 System.out.println(id + "번 명언은 존재하지 않습니다.");
+            }
+        }
+    }
+
+    //명언 수정 함수
+    private static void modifySaying(int id, String path) {
+        if (saying_list.containsKey(id)) {
+            String[] values = saying_list.get(id);
+            System.out.println("명언(기존) : " + values[0]);
+            System.out.print("명언 : ");
+            String new_saying = scanner.nextLine();
+
+            System.out.println("이름(기존) : " + values[1]);
+            System.out.print("이름 : ");
+            String new_name = scanner.nextLine();
+
+            saying_list.put(id, new String[]{new_name, new_saying});
+        } else {
+            String file_path = path + "/" + id + ".json";
+            File file = new File(file_path);
+            if (file.exists()) {
+                modifyFile(file_path);
+            } else {
+                System.out.println("파일이 존재하지 않습니다.");
             }
         }
     }

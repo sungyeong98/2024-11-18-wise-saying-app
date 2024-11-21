@@ -3,6 +3,7 @@ package org.example;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class WiseSayingService {
     private final WiseSayingRepository repo;
@@ -28,8 +29,20 @@ public class WiseSayingService {
                 .collect(Collectors.toList());
 
         List<String> storedSayings = repo.getStoredSayings();
+
+        /*
         result.addAll(storedSayings);
         return result;
+         */
+
+        List<String> allSayings = Stream.concat(result.stream(), storedSayings.stream())
+                .sorted((s1,s2) -> {
+                    int id1 = Integer.parseInt(s1.split(" / ")[0]);
+                    int id2 = Integer.parseInt(s2.split(" / ")[0]);
+                    return Integer.compare(id2, id1);
+                })
+                .collect(Collectors.toList());
+        return allSayings;
     }
 
     // 명언 수정(완료)

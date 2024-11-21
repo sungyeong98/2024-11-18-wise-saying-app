@@ -102,8 +102,9 @@ public class WiseSayingRepository {
         tempSayingList.clear();
     }
 
-    // 최신 ID 불러오기(완료)
+    // 최신 ID 불러오기(수정 요)
     public int getNextId(){
+        /*
         Set<Integer> allIds = new HashSet<>(tempSayingList.keySet());
 
         File folder = new File(storagePath);
@@ -120,6 +121,40 @@ public class WiseSayingRepository {
         }
 
         return allIds.stream().max(Integer::compareTo).orElse(0) + 1;
+
+         */
+
+        File idFile = new File(storagePath + "/lastId.txt");
+
+        File folder = new File(storagePath);
+        if(!folder.exists()) folder.mkdirs();
+
+        if(!idFile.exists()) {
+            try(BufferedWriter writer = new BufferedWriter(new FileWriter(idFile))){
+                writer.write("1");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return 1;
+        }
+
+        try(BufferedReader reader = new BufferedReader(new FileReader(idFile))){
+            return Integer.parseInt(reader.readLine().trim());
+        } catch (IOException | NumberFormatException e) {
+            return 1;
+        }
+    }
+
+    // 최신 ID 갱신
+    public void updateIdFile(int nextid){
+        File idFile = new File(storagePath + "/lastId.txt");
+
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter(idFile))){
+            writer.write(String.valueOf(nextid));
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // json 값 추출(완료)

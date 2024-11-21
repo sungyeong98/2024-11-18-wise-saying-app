@@ -16,11 +16,12 @@ public class WiseSayingService {
     public int addSaying(String author, String saying) {
         int nextId = repo.getNextId();
         repo.addSaying(nextId, author, saying);
+        repo.updateIdFile(nextId + 1);
 
         return nextId;
     }
 
-    // 모든 명언 불러오기(완료)
+    // 모든 명언 불러오기(수정 요)
     public List<String> getAllSayings() {
 
         //이 부분부터
@@ -65,7 +66,7 @@ public class WiseSayingService {
         }
     }
 
-    // 명언 저장
+    // 명언 저장(완료)
     public void saveSaying() {
         repo.saveTemporarySaying();
     }

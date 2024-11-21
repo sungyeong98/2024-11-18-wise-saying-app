@@ -18,8 +18,8 @@ public class WiseSayingController {
         System.out.print("작가 : ");
         String name = scanner.nextLine();
 
-        int nextId = service.addSaying(saying, name);
-        System.out.println(nextId + "번 명언이 등록되었습니다.");
+        int id = service.addSaying(saying, name);
+        System.out.println(id + "번 명언이 등록되었습니다.");
     }
 
     //명언 출력

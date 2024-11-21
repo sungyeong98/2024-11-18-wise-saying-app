@@ -104,31 +104,22 @@ public class WiseSayingRepository {
 
     // 최신 ID 불러오기(완료)
     public int getNextId(){
+        Set<Integer> allIds = new HashSet<>(tempSayingList.keySet());
+
         File folder = new File(storagePath);
-        if(!folder.exists() || !folder.isDirectory()) return 1;
 
-        File[] files = folder.listFiles((dir, name) -> name.endsWith(".json"));
-        Set<Integer> allIds = new HashSet<>();
-
-        if(files != null){
-            for (File file : files) {
-                try{
-                    String fileName = file.getName().replace(".json", "");
-                    int id = Integer.parseInt(fileName);
-                    allIds.add(id);
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                }
+        if (folder.exists() && folder.isDirectory()){
+            File[] files = folder.listFiles((dir, name) -> name.endsWith(".json"));
+            if (files != null){
+                Arrays.stream(files)
+                        .map(file -> file.getName().replace(".json",""))
+                        .filter(name -> name.matches("\\d+"))
+                        .mapToInt(Integer::parseInt)
+                        .forEach(allIds::add);
             }
         }
 
-        allIds.addAll(tempSayingList.keySet());
-
-        for(int i=1; i<=allIds.size(); i++){
-            if(!allIds.contains(i)) return i;
-        }
-
-        return allIds.stream().max(Integer::compareTo).orElse(0)+1;
+        return allIds.stream().max(Integer::compareTo).orElse(0) + 1;
     }
 
     // json 값 추출(완료)

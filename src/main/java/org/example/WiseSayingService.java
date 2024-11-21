@@ -22,18 +22,18 @@ public class WiseSayingService {
 
     // 모든 명언 불러오기(완료)
     public List<String> getAllSayings() {
+
+        //이 부분부터
         Map<Integer, String[]> sayings = repo.getTemporarySayings();
         List<String> result = sayings.entrySet().stream()
                 .map(entry -> String.format("%d / %s / %s (저장되지 않음)",
                         entry.getKey(), entry.getValue()[0], entry.getValue()[1]))
                 .collect(Collectors.toList());
 
-        List<String> storedSayings = repo.getStoredSayings();
+        //여기까지는 컨트롤러로 옮기기
+        // 이과정에서 임시저장 명언은 따로 sort해야될듯
 
-        /*
-        result.addAll(storedSayings);
-        return result;
-         */
+        List<String> storedSayings = repo.getStoredSayings();
 
         List<String> allSayings = Stream.concat(result.stream(), storedSayings.stream())
                 .sorted((s1,s2) -> {
@@ -68,5 +68,14 @@ public class WiseSayingService {
     // 명언 저장
     public void saveSaying() {
         repo.saveTemporarySaying();
+    }
+
+    // (임시) 입력값에서 id추출
+    public int getParamAsInt(String param) {
+        try{
+            return Integer.parseInt(param.replaceAll("[^0-9]", ""));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 }

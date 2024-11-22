@@ -16,7 +16,7 @@ public class Main {
 class App {
     static Scanner scanner = new Scanner(System.in);
 
-    static String path = "db/wiseSaying";
+    private static String path = "db/wiseSaying";
 
     static WiseSayingRepository repo = new WiseSayingRepository(path);
     static WiseSayingService service = new WiseSayingService(repo);

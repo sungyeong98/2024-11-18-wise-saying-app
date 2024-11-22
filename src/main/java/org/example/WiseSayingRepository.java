@@ -9,6 +9,11 @@ public class WiseSayingRepository {
 
     public WiseSayingRepository(String storagePath) {
         this.storagePath = storagePath;
+
+        File folder = new File(storagePath);
+        if(!folder.exists()){
+            folder.mkdir();
+        }
     }
 
     // 임시 명언 추가(완료)

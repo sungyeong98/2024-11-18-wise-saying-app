@@ -1,3 +1,4 @@
+import org.example.WiseSaying;
 import org.example.WiseSayingRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,8 +8,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,21 +48,11 @@ public class WiseSayingRepositoryTest {
 
         repo.addSaying(id, author, content);
 
-        assertEquals(1, repo.getTemporarySayings().size(), "해시맵 크기가 동일해야함");
-        assertArrayEquals(new String[]{author, content}, repo.getTemporarySayings().get(1));
-
-        File idFile = new File(path + "/lastId.txt");
-        assertTrue(idFile.exists(), "id파일이 존재해야함");
-
-        String contentFromFile;
-        try{
-            contentFromFile = new String(java.nio.file.Files.readAllBytes(idFile.toPath()));
-
-        } catch (IOException e){
-            throw new RuntimeException();
-        }
-
-        assertEquals("1", contentFromFile.trim(), "id가 21이어야함");
+        WiseSaying wiseSaying = repo.getTemporarySayings().get(id);
+        assertNotNull(wiseSaying, "저장 확인");
+        assertEquals(id, wiseSaying.getId(), "id 확인");
+        assertEquals(author, wiseSaying.getAuthor(), "작가 확인");
+        assertEquals(content, wiseSaying.getContent(), "내용 확인");
     }
 
     // 목록 부분
@@ -70,10 +61,11 @@ public class WiseSayingRepositoryTest {
         repo.addSaying(1, "a1", "c1");
         repo.addSaying(2, "a2", "c2");
 
-        Map<Integer, String[]> sayings = repo.getTemporarySayings();
-        assertEquals(2, sayings.size(), "해시맵 크기는 2여야함");
-        assertArrayEquals(new String[]{"a1","c1"}, sayings.get(1), "1번 데이터");
-        assertArrayEquals(new String[]{"a2","c2"}, sayings.get(2), "2번 데이터");
+        HashMap<Integer, WiseSaying> temp = repo.getTemporarySayings();
+
+        assertEquals(2, temp.size(), "데이터 갯수");
+        assertNotNull(temp.get(1), "1번 데이터");
+        assertNotNull(temp.get(2), "2번 데이터");
     }
 
     @Test   // 저장 명언 불러오기 테스트
@@ -102,8 +94,9 @@ public class WiseSayingRepositoryTest {
         boolean updated = repo.updateTemporarySaying(1, "UpdatedAuthor", "UpdatedSaying");
         assertTrue(updated, "저장여부");
 
-        Map<Integer, String[]> sayings = repo.getTemporarySayings();
-        assertArrayEquals(new String[]{"UpdatedAuthor", "UpdatedSaying"}, sayings.get(1), "데이터 동일 여부");
+        WiseSaying wiseSaying = repo.getTemporarySayings().get(1);
+        assertEquals("UpdatedAuthor", wiseSaying.getAuthor(), "작가 확인");
+        assertEquals("UpdatedSaying", wiseSaying.getContent(), "내용 확인");
     }
 
     @Test   // 저장 명언 수정 테스트

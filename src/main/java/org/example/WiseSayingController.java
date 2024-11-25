@@ -1,5 +1,7 @@
 package org.example;
 
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,14 +26,13 @@ public class WiseSayingController {
 
     //명언 출력
     public void printSaying(){
-        List<String> sayings = service.getAllSayings();
+        List<WiseSaying> tempSayings = service.getTempSayings();
+        Collections.reverse(tempSayings);
+        tempSayings.forEach(wiseSaying -> System.out.printf("%d / %s / %s (저장되지 않음)%n",
+                wiseSaying.getId(), wiseSaying.getAuthor(), wiseSaying.getContent()));
 
-        System.out.println("번호 / 작가 / 명언");
-        System.out.println("----------------------");
-
-        for(String saying : sayings){
-            System.out.println(saying);
-        }
+        List<String> SavedSayings = service.getSavedSayings();
+        SavedSayings.forEach(System.out::println);
     }
 
     //명언 삭제
@@ -63,8 +64,17 @@ public class WiseSayingController {
     }
 
     //명언 저장
-    public void saveSaying(String path){
+    public void saveSaying(){
         service.saveSaying();
         System.out.println("작성한 모든 명언이 저장되었습니다.");
+    }
+
+    // 입력값에서 id추출
+    public int getParamAsInt(String param) {
+        try{
+            return Integer.parseInt(param.replaceAll("[^0-9]", ""));
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 }

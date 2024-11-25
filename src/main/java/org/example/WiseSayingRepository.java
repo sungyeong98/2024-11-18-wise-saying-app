@@ -4,8 +4,8 @@ import java.io.*;
 import java.util.*;
 
 public class WiseSayingRepository {
-    private final String storagePath;
-    private final HashMap<Integer, String[]> tempSayingList = new HashMap<>();
+    private String storagePath;
+    private final HashMap<Integer, WiseSaying> tempSayingList = new LinkedHashMap<>();
 
     public WiseSayingRepository(String storagePath) {
         this.storagePath = storagePath;
@@ -18,11 +18,11 @@ public class WiseSayingRepository {
 
     // 임시 명언 추가(완료)
     public void addSaying(int id, String author, String saying){
-        tempSayingList.put(id, new String[]{author, saying});
+        tempSayingList.put(id, new WiseSaying(id, author, saying));
     }
 
     // 임시 명언 불러오기(완료)
-    public Map<Integer, String[]> getTemporarySayings(){
+    public HashMap<Integer, WiseSaying> getTemporarySayings(){
         return tempSayingList;
     }
 
@@ -34,6 +34,12 @@ public class WiseSayingRepository {
 
         File[] files = folder.listFiles((dir, name) -> name.endsWith(".json"));
         if (files == null) return sayings;
+
+        Arrays.sort(files, (f1,f2) -> {
+            int id1 = Integer.parseInt(f1.getName().replace(".json", ""));
+            int id2 = Integer.parseInt(f2.getName().replace(".json", ""));
+            return Integer.compare(id2, id1);
+        });
 
         for (File file : files) {
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -51,8 +57,10 @@ public class WiseSayingRepository {
 
     // 임시 명언 수정(완료)
     public boolean updateTemporarySaying(int id, String newAuthor, String newSaying){
-        if(tempSayingList.containsKey(id)){
-            tempSayingList.put(id, new String[]{newAuthor, newSaying});
+        WiseSaying saying = tempSayingList.get(id);
+        if(saying != null){
+            saying.setAuthor(newAuthor);
+            saying.setContent(newSaying);
             return true;
         }
         return false;
@@ -92,18 +100,16 @@ public class WiseSayingRepository {
 
     // 임시 명언 저장(완료)
     public void saveTemporarySaying(){
-        for (Map.Entry<Integer, String[]> entry : tempSayingList.entrySet()) {
-            int id = entry.getKey();
-            String[] data = entry.getValue();
+        tempSayingList.forEach((id, wiseSaying) -> {
 
             File file = new File(storagePath + "/" + id + ".json");
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
                 writer.write(String.format("{\"id\": %d, \"author\": \"%s\", \"content\": \"%s\"}",
-                        id, data[0], data[1]));
+                        wiseSaying.getId(), wiseSaying.getAuthor(), wiseSaying.getContent()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
+        });
         tempSayingList.clear();
     }
 

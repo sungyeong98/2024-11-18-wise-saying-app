@@ -9,8 +9,9 @@ public class WiseSayingController {
     private final WiseSayingService service;
     private final Scanner scanner = new Scanner(System.in);
 
-    public WiseSayingController(WiseSayingService service) {
-        this.service = service;
+    public WiseSayingController(Config config) {
+        WiseSayingRepository repo = new WiseSayingRepository(config);
+        this.service = new WiseSayingService(repo);
     }
 
     //명언 입력

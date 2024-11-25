@@ -14,15 +14,17 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WiseSayingRepositoryTest {
-    private WiseSayingRepository repo;
-    private final String path = "db/wiseSayingTest";
+    WiseSayingRepository repo;
+    private String path;
 
     @BeforeEach
     public void setUp() {
-        this.repo = new WiseSayingRepository(path);
+        TestConfig config = new TestConfig();
+        this.path = config.dbPath;
+
+        this.repo = new WiseSayingRepository(config);
 
         File folder = new File(path);
-
         if (!folder.exists()) {
             folder.mkdirs();
         }

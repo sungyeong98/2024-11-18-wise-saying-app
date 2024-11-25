@@ -7,8 +7,8 @@ public class WiseSayingRepository {
     private String storagePath;
     private final HashMap<Integer, WiseSaying> tempSayingList = new LinkedHashMap<>();
 
-    public WiseSayingRepository(String storagePath) {
-        this.storagePath = storagePath;
+    public WiseSayingRepository(Config config) {
+        this.storagePath = config.dbPath;
 
         File folder = new File(storagePath);
         if(!folder.exists()){

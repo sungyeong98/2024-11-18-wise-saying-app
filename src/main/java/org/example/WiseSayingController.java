@@ -6,12 +6,73 @@ import java.util.List;
 import java.util.Scanner;
 
 public class WiseSayingController {
-    private final WiseSayingService service;
-    private final Scanner scanner = new Scanner(System.in);
+    private WiseSayingService service;
+    private final Scanner scanner;
 
-    public WiseSayingController(Config config) {
-        WiseSayingRepository repo = new WiseSayingRepository(config);
+    // 실사용
+    public WiseSayingController(WiseSayingService service) {
+        WiseSayingRepository repo = new WiseSayingRepository();
         this.service = new WiseSayingService(repo);
+        this.scanner = new Scanner(System.in);
+    }
+
+    // 테스트용
+    public WiseSayingController(WiseSayingService service, Scanner scanner) {
+        this.scanner = scanner;
+        this.service = service;
+    }
+
+    // 루프
+    public void run(){
+        boolean flag = true;
+
+        System.out.println("== 명언 앱 ==");
+
+        while(flag) {
+            flag = Command();
+        }
+    }
+
+    // 동작
+    public boolean Command() {
+        System.out.print("명령) ");
+        String query = scanner.nextLine();
+
+        //명언 등록
+        if (query.equals("등록")) {
+            writeSaying();
+        }
+
+        //명언 목록
+        else if (query.equals("목록")) {
+            printSaying();
+        }
+
+        //명언 삭제
+        else if (query.contains("삭제?id=")) {
+            int deleteId = getParamAsInt(query);
+
+            deleteSaying(deleteId);
+        }
+
+        //명언 수정
+        else if (query.contains("수정?id=")) {
+            int editNum = getParamAsInt(query);
+
+            modifySaying(editNum);
+        }
+
+        //명언 저장
+        else if (query.equals("빌드")) {
+            saveSaying();
+        }
+
+        //종료
+        else if (query.equals("종료")) {
+            return false;
+        }
+
+        return true;
     }
 
     //명언 입력

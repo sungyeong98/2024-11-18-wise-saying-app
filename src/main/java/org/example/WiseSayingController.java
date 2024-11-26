@@ -1,6 +1,5 @@
 package org.example;
 
-
 import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
@@ -88,6 +87,8 @@ public class WiseSayingController {
 
     //명언 출력
     public void printSaying(){
+        System.out.println("번호 / 작가 / 명언\n----------------------");
+        
         List<WiseSaying> tempSayings = service.getTempSayings();
         Collections.reverse(tempSayings);
         tempSayings.forEach(wiseSaying -> System.out.printf("%d / %s / %s (저장되지 않음)%n",
@@ -139,4 +140,5 @@ public class WiseSayingController {
             return 0;
         }
     }
+
 }

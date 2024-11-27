@@ -47,11 +47,14 @@ public class WiseSayingController {
             String keywordType = Command.getKeywordType(query);
             String keyword = Command.getKeyword(query);
             int page = Command.getPage(query);
+
             if(keywordType!=null && keyword!=null) {
-                printSaying(keywordType, keyword);
+                printSaying(keywordType, keyword, page);
+                printPageInfo(keywordType, keyword, page);
             }
             else{
-                printSaying();
+                printSaying(page);
+                printPageInfo(page);
             }
         }
 
@@ -93,7 +96,7 @@ public class WiseSayingController {
         System.out.println(id + "번 명언이 등록되었습니다.");
     }
 
-    // 명언 출력
+    // 명언 출력(사용X)
     public void printSaying(){
         System.out.println("번호 / 작가 / 명언\n----------------------");
 
@@ -106,7 +109,7 @@ public class WiseSayingController {
         SavedSayings.forEach(System.out::println);
     }
 
-    // 명언 출력(키워드 입력시)
+    // 명언 출력(사용X)
     public void printSaying(String keywordType, String keyword){
         System.out.println("----------------------");
         System.out.printf("검색타입 : %s\n".formatted(keywordType));
@@ -122,6 +125,30 @@ public class WiseSayingController {
 
         List<String> SavedSayings = service.getSavedSayings(keywordType, keyword);
         SavedSayings.forEach(System.out::println);
+    }
+
+    // 명언 출력(페이지)   ->  최종
+    public void printSaying(int page){
+        System.out.println("번호 / 작가 / 명언\n----------------------");
+
+        List<String> sayings = service.getSayings(page);
+        sayings.forEach(System.out::println);
+
+        System.out.println("----------------------");
+    }
+
+    // 명언 출력(키워드)   ->  최종
+    public void printSaying(String keywordType, String keyword, int page){
+        System.out.println("----------------------");
+        System.out.printf("검색타입 : %s\n".formatted(keywordType));
+        System.out.printf("검색어  : %s\n".formatted(keyword));
+        System.out.println("----------------------");
+        System.out.println("번호 / 작가 / 명언\n----------------------");
+
+        List<String> sayings = service.getSayings(keywordType,keyword,page);
+        sayings.forEach(System.out::println);
+
+        System.out.println("----------------------");
     }
 
     // 명언 삭제
@@ -158,4 +185,47 @@ public class WiseSayingController {
         System.out.println("작성한 모든 명언이 저장되었습니다.");
     }
 
+    // 페이지 출력
+    public void printPageInfo(int page){
+        int dataSize = service.getSayingsSize();
+
+        int totalPages = (dataSize + 5 - 1) / 5;
+
+        StringBuilder pageInfo = new StringBuilder("페이지 : ");
+        for(int i = 1; i <= totalPages; i++){
+            if(i == page){
+                pageInfo.append("[").append(i).append("]");
+            }
+            else{
+                pageInfo.append(i);
+            }
+            if(i < totalPages){
+                pageInfo.append(" / ");
+            }
+        }
+
+        System.out.println(pageInfo);
+    }
+
+    // 페이지 출력(키워드)
+    public void printPageInfo(String keywordType, String keyword, int page){
+        int dataSize = service.getSayingsSize(keywordType, keyword);
+
+        int totalPages = (dataSize + 5 - 1) / 5;
+
+        StringBuilder pageInfo = new StringBuilder("페이지 : ");
+        for(int i = 1; i <= totalPages; i++){
+            if(i == page){
+                pageInfo.append("[").append(i).append("]");
+            }
+            else{
+                pageInfo.append(i);
+            }
+            if(i < totalPages){
+                pageInfo.append(" / ");
+            }
+        }
+
+        System.out.println(pageInfo);
+    }
 }

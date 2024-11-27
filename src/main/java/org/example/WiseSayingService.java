@@ -32,12 +32,22 @@ public class WiseSayingService {
 
     // 임시 명언 불러오기(키워드 입력시)
     public ArrayList<WiseSaying> getTempSayings(String keywordType, String keyword){
-        return new ArrayList<>(repo.getTemporarySaings(keywordType, keyword).values());
+        return new ArrayList<>(repo.getTemporarySayings(keywordType, keyword).values());
     }
 
     // 저장 명언 불러오기(키워드 입력시)
     public List<String> getSavedSayings(String keywordType, String keyword) {
         return repo.getSavedSayings(keywordType, keyword);
+    }
+
+    // 명언 불러오기  ->  최종 사용
+    public List<String> getSayings(int page){
+        return repo.getSayings(page);
+    }
+
+    // 명언 불러오기  ->  최종 사용
+    public List<String> getSayings(String keywordType, String keyword, int page){
+        return repo.getSayings(keywordType, keyword, page);
     }
 
     // 명언 수정
@@ -63,5 +73,15 @@ public class WiseSayingService {
     // 명언 저장
     public void saveSaying() {
         repo.saveTemporarySaying();
+    }
+
+    // 데이터 크기 불러오기
+    public int getSayingsSize(){
+        return repo.getSayingsSize();
+    }
+
+    // 데이터 크기 불러오기(키워드)
+    public int getSayingsSize(String keywordType, String keyword){
+        return repo.getSayingsSize(keywordType, keyword);
     }
 }

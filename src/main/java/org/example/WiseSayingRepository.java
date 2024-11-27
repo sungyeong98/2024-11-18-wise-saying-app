@@ -65,7 +65,7 @@ public class WiseSayingRepository {
     }
 
     // 임시 명언 불러오기(키워드 입력시)
-    public HashMap<Integer, WiseSaying> getTemporarySaings(String keywordType, String keyword) {
+    public HashMap<Integer, WiseSaying> getTemporarySayings(String keywordType, String keyword) {
         HashMap<Integer, WiseSaying> result = new HashMap<>();
 
         for(Map.Entry<Integer, WiseSaying> entry : tempSayingList.entrySet()){
@@ -134,6 +134,56 @@ public class WiseSayingRepository {
         }
 
         return sayings;
+    }
+
+    // 최종 사용
+    // 명언 불러오기(페이지)
+    public List<String> getSayings(int page) {
+        ArrayList<WiseSaying> tempSayings = new ArrayList<>(getTemporarySayings().values());
+        Collections.reverse(tempSayings);
+
+        List<String> savedSayings = getSavedSayings();
+
+        List<String> sayings = new ArrayList<>();
+        for(WiseSaying i : tempSayings){
+            sayings.add(i.toString());
+        }
+        sayings.addAll(savedSayings);
+
+        int pageSize = 5;
+        int startIndex = (page - 1) * pageSize;
+        int endIndex = Math.min(page * pageSize, sayings.size());
+
+        if(startIndex >= sayings.size()){
+            return Collections.emptyList();
+        }
+
+        return sayings.subList(startIndex, endIndex);
+    }
+
+    // 최종 사용
+    // 명언 불러오기(키워드)
+    public List<String> getSayings(String keywordType, String keyword, int page){
+        ArrayList<WiseSaying> tempSayings = new ArrayList<>(getTemporarySayings(keywordType, keyword).values());
+        Collections.reverse(tempSayings);
+
+        List<String> savedSayings = getSavedSayings(keywordType, keyword);
+
+        List<String> sayings = new ArrayList<>();
+        for(WiseSaying i : tempSayings){
+            sayings.add(i.toString());
+        }
+        sayings.addAll(savedSayings);
+
+        int pageSize = 5;
+        int startIndex = (page - 1) * pageSize;
+        int endIndex = Math.min(page * pageSize, sayings.size());
+
+        if(startIndex >= sayings.size()){
+            return Collections.emptyList();
+        }
+
+        return sayings.subList(startIndex, endIndex);
     }
 
     // 임시 명언 수정
@@ -264,5 +314,33 @@ public class WiseSayingRepository {
             if (end == -1) end = json.indexOf("}", start);
             return json.substring(start, end).trim();
         }
+    }
+
+    // 명언 총 크기 추출
+    public int getSayingsSize(){
+        ArrayList<WiseSaying> tempSayings = new ArrayList<>(getTemporarySayings().values());
+        List<String> savedSayings = getSavedSayings();
+
+        List<String> sayings = new ArrayList<>();
+        for(WiseSaying i : tempSayings){
+            sayings.add(i.toString());
+        }
+        sayings.addAll(savedSayings);
+
+        return sayings.size();
+    }
+
+    // 키워드 명언 총 크기 추출
+    public int getSayingsSize(String keywordType, String keyword){
+        ArrayList<WiseSaying> tempSayings = new ArrayList<>(getTemporarySayings(keywordType, keyword).values());
+        List<String> savedSayings = getSavedSayings(keywordType, keyword);
+
+        List<String> sayings = new ArrayList<>();
+        for(WiseSaying i : tempSayings){
+            sayings.add(i.toString());
+        }
+        sayings.addAll(savedSayings);
+
+        return sayings.size();
     }
 }

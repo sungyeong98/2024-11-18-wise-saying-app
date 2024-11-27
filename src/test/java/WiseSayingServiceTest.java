@@ -54,7 +54,7 @@ public class WiseSayingServiceTest {
 
     @Test   // 저장된 명언 불러오기 테스트
     public void testGetSavedSayings() {
-        when(repo.getStoredSayings()).thenReturn(List.of("3 / author3 / content3"));
+        when(repo.getSavedSayings()).thenReturn(List.of("3 / author3 / content3"));
 
         List<String> allSayings = service.getSavedSayings();
 

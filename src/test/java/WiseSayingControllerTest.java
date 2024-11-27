@@ -68,6 +68,37 @@ public class WiseSayingControllerTest {
         assertThat(result).contains("1 / 작가1 / 내용1 (저장되지 않음)");
     }
 
+    @DisplayName("명언 출력 테스트(키워드 입력)")
+    @Test
+    public void testPrint2(){
+        Scanner scanner = TestUtil.genScanner("목록?keywordType=content&keyword=과거");
+        repo.addSaying(1,"작가1", "현재1");
+        repo.addSaying(2,"작가2", "과거1");
+        repo.addSaying(3,"작가3", "현재2");
+        repo.addSaying(4,"작가4", "과거2");
+        repo.addSaying(5,"작가5", "현재3");
+        repo.addSaying(6,"작가6", "과거3");
+        repo.addSaying(7,"작가7", "현재4");
+        repo.addSaying(8,"작가8", "과거4");
+        repo.addSaying(9,"작가9", "현재5");
+
+        controller = new WiseSayingController(service, scanner);
+        controller.Command();
+
+        String result = output.toString();
+
+        assertThat(result)
+                .contains("----------------------")
+                .contains("검색타입 : content")
+                .contains("검색어  : 과거")
+                .contains("----------------------")
+                .contains("번호 / 작가 / 명언\n----------------------")
+                .contains("8 / 작가8 / 과거4 (저장되지 않음)")
+                .contains("6 / 작가6 / 과거3 (저장되지 않음)")
+                .contains("4 / 작가4 / 과거2 (저장되지 않음)")
+                .contains("2 / 작가2 / 과거1 (저장되지 않음)");
+    }
+
     @DisplayName("명언 삭제 테스트(정상 삭제)")
     @Test
     public void testDelete(){
@@ -141,7 +172,7 @@ public class WiseSayingControllerTest {
         String result = output.toString();
         assertThat(result).contains("작성한 모든 명언이 저장되었습니다.");
 
-        List<String> temp = repo.getStoredSayings();
+        List<String> temp = repo.getSavedSayings();
         assertThat(temp.get(0).toString()).contains("1 / 작가1 / 내용1");
     }
 }

@@ -74,7 +74,7 @@ public class WiseSayingRepositoryTest {
             writer.write("{\"id\": 2, \"author\": \"Author2\", \"content\": \"Saying2\"}");
         }
 
-        List<String> sayings = repo.getStoredSayings();
+        List<String> sayings = repo.getSavedSayings();
         assertEquals(2, sayings.size(), "파일 크기");
         assertTrue(sayings.contains("1 / Author1 / Saying1"), "1번 데이터");
         assertTrue(sayings.contains("2 / Author2 / Saying2"), "2번 데이터");

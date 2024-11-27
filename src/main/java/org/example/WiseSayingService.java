@@ -12,9 +12,9 @@ public class WiseSayingService {
     }
 
     // 명언 추가
-    public int addSaying(String author, String saying) {
+    public int addSaying(String author, String content) {
         int nextId = repo.getNextId();
-        repo.addSaying(nextId, author, saying);
+        repo.addSaying(nextId, author, content);
         repo.updateIdFile(nextId + 1);
 
         return nextId;
@@ -27,7 +27,17 @@ public class WiseSayingService {
 
     // 저장된 명언 불러오기
     public List<String> getSavedSayings() {
-        return repo.getStoredSayings();
+        return repo.getSavedSayings();
+    }
+
+    // 임시 명언 불러오기(키워드 입력시)
+    public ArrayList<WiseSaying> getTempSayings(String keywordType, String keyword){
+        return new ArrayList<>(repo.getTemporarySaings(keywordType, keyword).values());
+    }
+
+    // 저장 명언 불러오기(키워드 입력시)
+    public List<String> getSavedSayings(String keywordType, String keyword) {
+        return repo.getSavedSayings(keywordType, keyword);
     }
 
     // 명언 수정

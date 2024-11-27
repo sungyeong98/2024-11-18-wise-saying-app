@@ -1,6 +1,5 @@
 package org.example;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 
@@ -97,6 +96,7 @@ public class WiseSayingController {
     }
 
     // 명언 출력(사용X)
+    /*
     public void printSaying(){
         System.out.println("번호 / 작가 / 명언\n----------------------");
 
@@ -108,8 +108,10 @@ public class WiseSayingController {
         List<String> SavedSayings = service.getSavedSayings();
         SavedSayings.forEach(System.out::println);
     }
+     */
 
     // 명언 출력(사용X)
+    /*
     public void printSaying(String keywordType, String keyword){
         System.out.println("----------------------");
         System.out.printf("검색타입 : %s\n".formatted(keywordType));
@@ -126,6 +128,7 @@ public class WiseSayingController {
         List<String> SavedSayings = service.getSavedSayings(keywordType, keyword);
         SavedSayings.forEach(System.out::println);
     }
+     */
 
     // 명언 출력(페이지)   ->  최종
     public void printSaying(int page){

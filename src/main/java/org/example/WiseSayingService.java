@@ -1,6 +1,5 @@
 package org.example;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class WiseSayingService {
@@ -20,16 +19,19 @@ public class WiseSayingService {
         return nextId;
     }
 
+    /*
     // 임시 명언 불러오기
     public ArrayList<WiseSaying> getTempSayings() {
         return new ArrayList<>(repo.getTemporarySayings().values());
     }
+     */
 
     // 저장된 명언 불러오기
     public List<String> getSavedSayings() {
         return repo.getSavedSayings();
     }
 
+    /*
     // 임시 명언 불러오기(키워드 입력시)
     public ArrayList<WiseSaying> getTempSayings(String keywordType, String keyword){
         return new ArrayList<>(repo.getTemporarySayings(keywordType, keyword).values());
@@ -39,6 +41,7 @@ public class WiseSayingService {
     public List<String> getSavedSayings(String keywordType, String keyword) {
         return repo.getSavedSayings(keywordType, keyword);
     }
+     */
 
     // 명언 불러오기  ->  최종 사용
     public List<String> getSayings(int page){
